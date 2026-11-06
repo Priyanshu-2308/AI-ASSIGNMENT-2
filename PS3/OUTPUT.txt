@@ -1,0 +1,152 @@
+2 ?- consult(['C:/Users/piku/Desktop/AI/royal_archive_access.pl']).
+ROYAL ARCHIVE ACCESS VERIFICATION - RESOLUTION REFUTATION
+
+========================================================================
+STEP 1: Predicate logic representation
+========================================================================
+  [1] Archivist who verifies a record is trusted
+        forall x.(forall r.(((archivist(x) & verifies(x, r)) -> trusted(x))))
+  [2] Trusted person with access to a sealed record may inspect it
+        forall x.(forall r.(((trusted(x) & (has_access(x, r) & sealed(r))) -> permitted(x, r))))
+  [3] Inspecting a record and finding a hidden mark verifies it
+        forall x.(forall r.(((inspects(x, r) & finds_mark(x, r)) -> verifies(x, r))))
+  [4] Every record stored in the royal archive is sealed
+        forall r.((stored_in(r, royal_archive) -> sealed(r)))
+  [5] scroll_7 is stored in the royal archive
+        stored_in(scroll_7, royal_archive)
+  [6] Mira has access to scroll_7
+        has_access(mira, scroll_7)
+  [7] Mira inspects scroll_7 and finds a hidden mark in it
+        (inspects(mira, scroll_7) & finds_mark(mira, scroll_7))
+  [8] Mira is an archivist
+        archivist(mira)
+
+  GOAL: trusted(mira)
+
+========================================================================
+STEP 2: Negation of goal
+========================================================================
+  Goal           : trusted(mira)
+  Negated goal   : ~trusted(mira)
+  [9] added to the knowledge base.
+
+========================================================================
+STEP 3: Implication removal  (A -> B  ==>  ~A | B)
+========================================================================
+  [1] forall x.(forall r.((~(archivist(x) & verifies(x, r)) | trusted(x))))
+  [2] forall x.(forall r.((~(trusted(x) & (has_access(x, r) & sealed(r))) | permitted(x, r))))
+  [3] forall x.(forall r.((~(inspects(x, r) & finds_mark(x, r)) | verifies(x, r))))
+  [4] forall r.((~stored_in(r, royal_archive) | sealed(r)))
+  [5] stored_in(scroll_7, royal_archive)
+  [6] has_access(mira, scroll_7)
+  [7] (inspects(mira, scroll_7) & finds_mark(mira, scroll_7))
+  [8] archivist(mira)
+  [9] ~trusted(mira)
+
+========================================================================
+STEP 4: Move negation inward (De Morgan / double negation)
+========================================================================
+  [1] forall x.(forall r.(((~archivist(x) | ~verifies(x, r)) | trusted(x))))
+  [2] forall x.(forall r.(((~trusted(x) | (~has_access(x, r) | ~sealed(r))) | permitted(x, r))))
+  [3] forall x.(forall r.(((~inspects(x, r) | ~finds_mark(x, r)) | verifies(x, r))))
+  [4] forall r.((~stored_in(r, royal_archive) | sealed(r)))
+  [5] stored_in(scroll_7, royal_archive)
+  [6] has_access(mira, scroll_7)
+  [7] (inspects(mira, scroll_7) & finds_mark(mira, scroll_7))
+  [8] archivist(mira)
+  [9] ~trusted(mira)
+  (Negations now apply only to atoms.)
+
+========================================================================
+STEP 5: Standardization (variables made unique across formulas)
+========================================================================
+  [1] forall x_1.(forall r_2.(((~archivist(x_1) | ~verifies(x_1, r_2)) | trusted(x_1))))
+  [2] forall x_3.(forall r_4.(((~trusted(x_3) | (~has_access(x_3, r_4) | ~sealed(r_4))) | permitted(x_3, r_4))))
+  [3] forall x_5.(forall r_6.(((~inspects(x_5, r_6) | ~finds_mark(x_5, r_6)) | verifies(x_5, r_6))))
+  [4] forall r_7.((~stored_in(r_7, royal_archive) | sealed(r_7)))
+  [5] stored_in(scroll_7, royal_archive)
+  [6] has_access(mira, scroll_7)
+  [7] (inspects(mira, scroll_7) & finds_mark(mira, scroll_7))
+  [8] archivist(mira)
+  [9] ~trusted(mira)
+
+========================================================================
+STEP 6: Skolemization
+========================================================================
+  [1] forall x_1.(forall r_2.(((~archivist(x_1) | ~verifies(x_1, r_2)) | trusted(x_1))))
+  [2] forall x_3.(forall r_4.(((~trusted(x_3) | (~has_access(x_3, r_4) | ~sealed(r_4))) | permitted(x_3, r_4))))
+  [3] forall x_5.(forall r_6.(((~inspects(x_5, r_6) | ~finds_mark(x_5, r_6)) | verifies(x_5, r_6))))
+  [4] forall r_7.((~stored_in(r_7, royal_archive) | sealed(r_7)))
+  [5] stored_in(scroll_7, royal_archive)
+  [6] has_access(mira, scroll_7)
+  [7] (inspects(mira, scroll_7) & finds_mark(mira, scroll_7))
+  [8] archivist(mira)
+  [9] ~trusted(mira)
+  No existential quantifiers occur in the knowledge base or the
+  negated goal, so NO Skolem constants/functions are needed.
+  Remaining universal quantifiers are dropped (implicit) in Step 7.
+
+========================================================================
+STEP 7: CNF clauses (each clause is a disjunction of literals)
+========================================================================
+  C1: ~archivist(A) | ~verifies(A, B) | trusted(A)      (from formula [1])
+  C2: ~trusted(A) | ~has_access(A, B) | ~sealed(B) | permitted(A, B)      (from formula [2])
+  C3: ~inspects(A, B) | ~finds_mark(A, B) | verifies(A, B)      (from formula [3])
+  C4: ~stored_in(A, royal_archive) | sealed(A)      (from formula [4])
+  C5: stored_in(scroll_7, royal_archive)      (from formula [5])
+  C6: has_access(mira, scroll_7)      (from formula [6])
+  C7: inspects(mira, scroll_7)      (from formula [7])
+  C8: finds_mark(mira, scroll_7)      (from formula [7])
+  C9: archivist(mira)      (from formula [8])
+  C10: ~trusted(mira)      (from formula [9])
+
+========================================================================
+STEP 8: Resolution refutation
+========================================================================
+  Start with the negated goal  C10: ~trusted(mira)
+
+  Step 1:
+     C10  = ~trusted(mira)
+     C1  = ~archivist(A) | ~verifies(A, B) | trusted(A)
+     resolve on  ~trusted(mira)  with  trusted(A)
+     R1  = ~archivist(mira) | ~verifies(mira, A)
+
+  Step 2:
+     R1  = ~archivist(mira) | ~verifies(mira, A)
+     C9  = archivist(mira)
+     resolve on  ~archivist(mira)  with  archivist(mira)
+     R2  = ~verifies(mira, A)
+
+  Step 3:
+     R2  = ~verifies(mira, A)
+     C3  = ~inspects(A, B) | ~finds_mark(A, B) | verifies(A, B)
+     resolve on  ~verifies(mira, A)  with  verifies(B, C)
+     R3  = ~inspects(mira, A) | ~finds_mark(mira, A)
+
+  Step 4:
+     R3  = ~inspects(mira, A) | ~finds_mark(mira, A)
+     C7  = inspects(mira, scroll_7)
+     resolve on  ~inspects(mira, A)  with  inspects(mira, scroll_7)
+     R4  = ~finds_mark(mira, scroll_7)
+
+  Step 5:
+     R4  = ~finds_mark(mira, scroll_7)
+     C8  = finds_mark(mira, scroll_7)
+     resolve on  ~finds_mark(mira, scroll_7)  with  finds_mark(mira, scroll_7)
+     R5  = []  (EMPTY CLAUSE)
+
+
+  The empty clause [] was derived after 5 resolution steps.
+  Knowledge-base clauses used in the proof   : [1,3,7,8,9]
+  Clauses not needed for this proof          : [2,4,5,6]
+
+========================================================================
+STEP 9: Cross-check with plain Prolog
+========================================================================
+  ?- pl_trusted(mira).   true.   (agrees with the refutation)
+
+========================================================================
+CONCLUSION: KB + ~trusted(mira) is unsatisfiable (empty clause derived),
+hence  trusted(mira)  is logically entailed.  Q.E.D.
+========================================================================
+true.
